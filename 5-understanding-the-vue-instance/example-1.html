@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+
+	<title>Example</title>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<h1>{{ title }}</h1>
+		<button @click="show">Show Paragraph</button>
+		<p v-if="showParagraph">This is not always visible</p>
+	</div><!-- /#app -->
+
+	<div id="app2">
+		<h1>{{ title }}</h1>
+		<button @click="onChange">Change something in Vue 1</button>
+	</div><!-- /#app2 -->
+
+	<div id="app3">
+		
+	</div><!-- /#app3 -->
+
+	<script>
+		var vm1 = new Vue({
+			data: {
+				title: 'The VueJS Instance',
+				showParagraph: false
+			},
+			methods: {
+				show: function() {
+					this.showParagraph = true;
+					this.updateTitle('Ths VueJS Instance (Updated)')
+				},
+				updateTitle: function(title) {
+					this.title = title;
+				}
+			},
+			computed: {
+				lowercaseTitle: function() {
+					return this.title.toLowerCase();
+				}
+			},
+			watch: {
+				title: function(value) {
+					alert('Title changed, new value: ' + value);
+				}
+			}
+		});
+
+		vm1.$mount('#app1');
+
+		setTimeout(function(){
+			vm1.title = 'Changed by timer!';
+		}, 3000)
+
+		var vm2 = new Vue({
+			el: '#app2',
+			data: {
+				title: 'Second Instance'
+			},
+			methods: {
+				onChange: function() {
+					vm1.title = 'Changed!';
+				}
+			}
+		});
+
+		var vm3 = new Vue({
+			template: '<h1>Hello!</h1>'
+		});
+
+		vm3.$mount('#app3')
+	</script>
+</body>
+</html>
